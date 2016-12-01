@@ -1,0 +1,77 @@
+html {
+    box-sizing: border-box;
+}
+
+*, *::after, *::before {
+    box-sizing: inherit;
+}
+
+body {
+    background: #FFFD77;
+    position: relative;
+}
+
+h2 {
+    text-align: center;
+    color: deeppink;
+    font-size: 4em;
+    text-shadow: -2px 0px 1px black;
+    font-family: Montserrat;
+    -webkit-animation: rubberBand 1s;
+    -moz-animation: rubberBand 1s;
+    animation: rubberBand 1s;
+}
+
+.face {
+    position: relative;
+    display: inline-block;
+    z-index: 10;
+    width: 20em;
+    height: 20em;
+    animation: raiseup 1s linear 3s 1 normal;
+}
+.face .eye {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 80px;
+    height: 73px;
+    border-radius: 50%;
+    background-color: white;
+    overflow: hidden;
+    background-color: white;
+}
+.face .eye.eye-left {
+    top: 30px;
+    left: 63px;
+}
+.face .eye.eye-right {
+    top: 26px;
+    left: 165px;
+}
+.face .eye .iris {
+    margin-top: 21px;
+    margin-left: 23px;
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    border-radius: 50%;
+    background-color: black;
+    transform: translate(15px, 3px);
+}
+.face .eye .iris .pupil {
+    margin-top: 13px;
+    margin-left: 15px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: white;
+}
+@keyframes raiseup {
+    from {
+        transform: translateY(300px);
+    }
+    to {
+        transform: translateY(0px);
+    }
+}
