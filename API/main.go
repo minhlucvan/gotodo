@@ -1,5 +1,7 @@
 package API
 
+import "fmt"
+
 type JsonRespone struct {
 	JMeta struct {
 		     Status string `json:"status"`
@@ -9,41 +11,36 @@ type JsonRespone struct {
 	JData interface{} `json:"data"`
 }
 
-func (r JsonRespone) Ok(data ...interface{}) *JsonRespone {
-	if len(data) > 0 {
-		r.Data(data[0])
-	}
-	
+func (r JsonRespone) Ok() *JsonRespone {
 	r.JMeta.Status = string(STATUS.Ok)
 	return &r
 }
 
-func (r JsonRespone) Err(err ...interface{}) *JsonRespone {
-	if len(err) > 0 {
-		r.Errors(err[0])
-	}
+func (r JsonRespone) Err() *JsonRespone {
 	r.JMeta.Status = string(STATUS.Error)
 	return &r
 }
 
-func (r JsonRespone) Errors(err interface{}) *JsonRespone {
+func (r JsonRespone) Throw(err interface{}) *JsonRespone {
 	r.JMeta.Errors = err
 	return &r
 }
 
 func (r JsonRespone) Data(data interface{}) *JsonRespone {
 	r.JData = data
+	fmt.Println(r)
 	return &r
 }
 
 func (r JsonRespone) Msg(msg string) *JsonRespone {
 	r.JMeta.Message = msg
+	fmt.Println(r)
 	return &r
 }
 
 func JSON(data ...interface{}) *JsonRespone  {
 	res := JsonRespone{}
-	res.Ok(data)
+	res.Ok()
 	
 	return &res
 }

@@ -6,10 +6,14 @@ import (
 	"github.com/minhlucvan/gotodo/utils/validate"
 )
 
+type LoginResponse struct {
+	Token string `json:"token"`
+}
+
 
 type Login struct {
 	UserName string `form:"username" json:"username" validate:"required"`
-	Password string `form:"password" json:"username" validate:"required"`
+	Password string `form:"password" json:"password" validate:"required"`
 }
 
 func (l Login) Validate() error{
@@ -30,14 +34,14 @@ func (api Login) Serve(ctx *iris.Context){
 	form := Login{}
 	formErr := ctx.ReadForm(&form)
 	if formErr != nil {
-		response = API.JSON().Err(formErr).Msg("bad request")
+		response = response.Err().Throw(formErr).Msg("bad request")
 		ctx.JSON(iris.StatusBadRequest, response)
 		return
 	}
 	validateErr := form.Validate()
 	
 	if validateErr != nil {
-		response = API.JSON().Err(validateErr).Msg("validation error found")
+		response = response.Err().Throw(validateErr).Msg("validation error found")
 		ctx.JSON(iris.StatusBadRequest, response)
 		return
 	}
@@ -45,6 +49,10 @@ func (api Login) Serve(ctx *iris.Context){
 	ctx.Session().Set("token", "secret")
 	ctx.JSON(iris.StatusOK, response)
 	
-	response = API.JSON(ctx.Session().GetAll()).Msg("login sucessfull")
-	ctx.JSON(iris.StatusBadRequest, response)
+	token := ctx.Session().GetString("token")
+	data := LoginResponse{Token: token}
+	response = response.Ok().Data(data).Msg("login sucessfull")
+	
+	ctx.JSON(iris.StatusOK, response)
 }
+

@@ -19,7 +19,6 @@ func init(){
 func setMiddlewares(){
 	iris.Use(logger.Handler)
 	iris.Use(i18n.Handler)
-	
 }
 
 func setControllers(){
@@ -27,7 +26,7 @@ func setControllers(){
 }
 
 func setAPI(){
-	iris.Handle("GET", "/login/", authapi.Login{})
+	iris.Handle("POST", "/login/", authapi.Login{})
 }
 
 func setConfig(){

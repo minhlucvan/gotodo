@@ -15,19 +15,29 @@ type AuthMiddleware struct {
 
 func (m AuthMiddleware) Serve(ctx *iris.Context){
 	m.Ctx = ctx
-	if(m.verifyToken() == true){
-		
+	if(m.Verify() == true){
+		m.onAuthPass()
+	} else {
+		m.onAuthFail()
 	}
 }
 
 
 func (m AuthMiddleware) onAuthPass(){
+	m.Ctx.Session().Set("login", "true")
+	m.Ctx.Session().Set("user", struct {
+		Name string
+	}{Name: "minh"})
 	m.Ctx.Next()
 }
 
 func (m AuthMiddleware) onAuthFail(){
 	m.Ctx.Text(iris.StatusUnauthorized, AUTH_FAILURE_MSG)
 	m.Ctx.SetConnectionClose()
+}
+
+func (m AuthMiddleware) Verify() bool{
+	return true
 }
 
 
